@@ -1,4 +1,6 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 
 def index(request):
-  return HttpResponse("Hello World, You are at the notes index page")
+  return render(request, "notes/index.html")
+  
