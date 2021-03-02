@@ -2,13 +2,17 @@ from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
+from notes.models import Note
 
 def index(request):
   return render(request, "notes/index.html")
 
 def home(request):
-  response = "You are at the home page"
-  return HttpResponse(response)
+  if(request.user.is_authenticated):
+    username = request.user.username
+    notes = Note.objects.all().filter(user = request.user)
+
+  return render(request, "notes/home.html", {'notes': notes})
 
 def signup(request):
   if(request.method == 'POST'):
