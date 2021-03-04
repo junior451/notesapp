@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import authenticate, login, logout
 from notes.models import Note
 from notes.forms import NoteForm
 from django.utils import timezone
@@ -15,7 +15,12 @@ def home(request):
     username = request.user.username
     notes = Note.objects.all().filter(user = request.user)
 
-  return render(request, "notes/home.html", {'notes': notes})
+    context = {
+      'username': username,
+      'notes': notes
+    }
+
+  return render(request, "notes/home.html", context)
 
 def signup(request):
   if(request.method == 'POST'):

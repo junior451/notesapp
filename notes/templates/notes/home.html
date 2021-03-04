@@ -1,4 +1,4 @@
-<h2>Welcome to your notes</h2>
+<h2>Hi {{username}}.  Welcome to your notes</h2>
 <a href="/notes/new">Create a new note</a><br>
 
 {% if notes.exists %}
@@ -9,5 +9,7 @@
     {%endfor%}
   </ul>
 {% endif %}
+
+<a href="/logout">Logout</a>
 
  

@@ -1,3 +1,6 @@
+<a href="/notes/home">Home</a>&nbsp&nbsp
+<a href="/logout">Logout</a>
+
 {% block content %}
   <h3>Edit your Note</h3>
 
@@ -6,6 +9,7 @@
     <table>
     {{ form.as_table }}
     </table>
+    <input class="button" type="button" onclick="window.history.back()" value="Cancel">&nbsp&nbsp
     <input type="submit" value="Save">
   </form>
 {% endblock %}

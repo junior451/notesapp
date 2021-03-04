@@ -6,6 +6,9 @@
     <table>
     {{ form.as_table }}
     </table>
+    <input class="button" type="button" onclick="window.history.back()" value="Cancel">&nbsp&nbsp
     <input type="submit" value="Save">
-  </form>
+  </form><br>
 {% endblock %}
+
+<a href="/logout">Logout</a>
