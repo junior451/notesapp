@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 from notes.models import Note
@@ -45,4 +45,27 @@ def newNote(request):
   else:
     form = NoteForm()
     return render(request, 'notes/noteForm.html', {'form':form})
-    
+
+def viewNote(request, note_id):
+  note = get_object_or_404(Note, pk=note_id)
+  return render(request, 'notes/viewNote.html', {'note':note})
+
+def updateNote(request, note_id):
+  note = get_object_or_404(Note, pk=note_id)
+
+  if(request.method == 'POST'):
+    form = NoteForm(request.POST)
+    if(form.is_valid()):
+      note.title = form.cleaned_data['title']
+      note.noteText = form.cleaned_data['noteText']
+      note.save()
+    return redirect('home')
+
+  else:
+    form = NoteForm(instance=note)
+    return render(request, 'notes/updateNoteForm.html', {'form':form})
+
+def deleteNote(request, note_id):
+  note = get_object_or_404(Note, pk=note_id)
+  note.delete()
+  return redirect('home')

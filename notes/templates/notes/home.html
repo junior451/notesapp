@@ -5,7 +5,7 @@
   <h3>These are your current notes</h3>
   <ul>
     {% for note in notes %}
-      <li><a href="">{{ note.title }}</a></li><br/>
+      <li><a href="/notes/view/{{ note.id }}">{{ note.title }}</a></li><br/>
     {%endfor%}
   </ul>
 {% endif %}

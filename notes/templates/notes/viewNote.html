@@ -1,0 +1,10 @@
+<div>
+  <h3>Title: {{note.title}}</h3>
+  <p>Text: {{note.noteText}}</p>
+  <p>Created on: {{note.date}}</p>
+</div>
+
+<div>
+  <a href="/notes/edit/{{ note.id }}">Edit</a>&nbsp&nbsp
+  <a href="/notes/delete/{{ note.id }}">Delete</a>
+</div>
