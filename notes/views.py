@@ -1,3 +1,5 @@
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.forms import UserCreationForm
@@ -5,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from notes.models import Note
 from notes.forms import NoteForm
 from django.utils import timezone
+from .serializers import *
 
 
 def index(request):
@@ -36,6 +39,13 @@ def signup(request):
   else:
     form = UserCreationForm()
     return render(request, 'notes/signup.html', {'form':form})
+
+@api_view(('GET',))
+def NotesList(request):
+  notes = Note.objects.all()
+  serializer = NoteSerializer(notes, context={'request': request}, many=True)
+  return Response(serializer.data)
+
 
 def newNote(request):
   if(request.method) == 'POST':
