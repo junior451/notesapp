@@ -61,9 +61,11 @@ def newNote(request):
     form = NoteForm()
     return render(request, 'notes/noteForm.html', {'form':form})
 
+@api_view(('GET',))
 def viewNote(request, note_id):
   note = get_object_or_404(Note, pk=note_id)
-  return render(request, 'notes/viewNote.html', {'note':note})
+  serializer = NoteSerializer(note, context={'request': request}, many=False)
+  return Response(serializer.data)
 
 def updateNote(request, note_id):
   note = get_object_or_404(Note, pk=note_id)
