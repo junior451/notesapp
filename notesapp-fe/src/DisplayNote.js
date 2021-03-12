@@ -2,16 +2,6 @@ import React, { Component } from 'react'
 import {Modal, ModalHeader, ModalBody, ModalFooter, Button} from 'reactstrap'
 
 class DisplayNote extends Component {
-  state = {
-    show:this.props.showNote
-  }
-
-  toggle(){
-    this.setState({
-      show: !this.state.show
-    });
-  }
-
   render() {
     return (
       <Modal centered isOpen={this.props.showNote}>

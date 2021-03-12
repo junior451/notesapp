@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import status
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.forms import UserCreationForm
@@ -8,6 +9,7 @@ from notes.models import Note
 from notes.forms import NoteForm
 from django.utils import timezone
 from .serializers import *
+from django.contrib.auth.models import User
 
 
 def index(request):
@@ -47,20 +49,17 @@ def NotesList(request):
   return Response(serializer.data)
 
 
+@api_view(('POST',))
 def newNote(request):
-  if(request.method) == 'POST':
-    form = NoteForm(request.POST)
-    if(form.is_valid()):
-      title = form.cleaned_data['title']
-      noteText = form.cleaned_data['noteText']
-      note = Note(title=title, noteText=noteText, date=timezone.now(), user=request.user)
-      note.save()
-      return redirect('home')
-
-  else:
-    form = NoteForm()
-    return render(request, 'notes/noteForm.html', {'form':form})
-
+  if(request.method == 'POST'):
+    title = request.data["title"]
+    noteText = request.data["noteText"]
+    user = User.objects.get(username="benChilli332")
+    note = Note(title=title, noteText=noteText, date=timezone.now(), user=user)
+    note.save()
+  
+  return Response(status=status.HTTP_201_CREATED)
+    
 @api_view(('GET',))
 def viewNote(request, note_id):
   note = get_object_or_404(Note, pk=note_id)
