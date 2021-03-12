@@ -7,7 +7,9 @@ class App extends Component {
   state = {
     notes:[],
     displayNote: false,
-    note_id: null
+    currentNoteTitle: null,
+    currentNoteText:null,
+    createNewNote:false
   }
 
   componentDidMount() {
@@ -15,12 +17,19 @@ class App extends Component {
     .then((res) => this.setState({notes: res.data}))
   }
 
-  viewNote = (id) =>{
+  viewNote = (title, text) =>{
 
     this.setState({
       displayNote: !this.state.displayNote,
-      note_id:id
+      currentNoteTitle:title,
+      currentNoteText:text
     })
+  }
+
+  closeNote = () =>{
+    this.setState({
+      displayNote:!this.state.displayNote
+    });
   }
 
   renderNotes = () => {
@@ -30,7 +39,7 @@ class App extends Component {
           {note.title}
         </span>
         <span>
-          <button className="btn btn-secondary mr-2" onClick={() => this.viewNote(note.pk)}>View</button>{' '}
+          <button className="btn btn-secondary mr-2" onClick={() => this.viewNote(note.title, note.noteText)}>View</button>{' '}
           <button className="btn btn-danger">Delete</button>
         </span>
       </li>
@@ -45,14 +54,12 @@ class App extends Component {
           <div className="col-md-6 col-sm-10 mx-auto p-0">
             <div className="card p-3">
               <div className="mb-4">
-                <button
-                  className="btn btn-primary">
-                  Create New Note
-                </button>
+                <button className="btn btn-primary">Create New Note</button>
               </div>
               <ul className="list-group list-group-flush border-top-0">
                 {this.renderNotes()}
-                {this.state.displayNote && <DisplayNote id={this.state.note_id}/>}
+                {<DisplayNote showNote={this.state.displayNote} noteTitle={this.state.currentNoteTitle} 
+                noteText={this.state.currentNoteText} onClose={this.closeNote}/>}
               </ul>
             </div>
           </div>

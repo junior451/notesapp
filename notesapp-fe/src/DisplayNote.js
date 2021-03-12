@@ -1,9 +1,29 @@
 import React, { Component } from 'react'
+import {Modal, ModalHeader, ModalBody, ModalFooter, Button} from 'reactstrap'
 
 class DisplayNote extends Component {
+  state = {
+    show:this.props.showNote
+  }
+
+  toggle(){
+    this.setState({
+      show: !this.state.show
+    });
+  }
+
   render() {
     return (
-    <h1>{this.props.id}</h1>
+      <Modal centered isOpen={this.props.showNote}>
+          <ModalHeader>{this.props.noteTitle}</ModalHeader>
+          <ModalBody>
+            {this.props.noteText}
+          </ModalBody>
+          <ModalFooter>
+            <Button color='primary'>Edit</Button>
+            <Button color='secondary' onClick={this.props.onClose}>Close</Button>
+          </ModalFooter>
+      </Modal>
     );
   }
 }
