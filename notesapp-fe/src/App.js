@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Card, CardText, CardBody, CardTitle } from 'reactstrap'
 import axios from "axios";
 import DisplayNote from './DisplayNote'
 import CreateNewNote from './CreateNewNote';
@@ -8,6 +7,7 @@ class App extends Component {
   state = {
     notes:[],
     displayNote: false,
+    currentNoteId:null,
     currentNoteTitle: null,
     currentNoteText:null,
     createNewNote:false
@@ -18,9 +18,10 @@ class App extends Component {
     .then((res) => this.setState({notes: res.data}))
   }
 
-  viewNote = (title, text) =>{
+  viewNote = (id,title, text) =>{
     this.setState({
       displayNote: !this.state.displayNote,
+      currentNoteId: id,
       currentNoteTitle:title,
       currentNoteText:text
     })
@@ -39,6 +40,11 @@ class App extends Component {
     });
   }
 
+  deleteNote = (note_id) =>{
+    axios.delete(`/notes/delete/${note_id}/`)
+    window.location.reload()
+  }
+
   renderNotes = () => {
     return this.state.notes.map((note) => (
       <li key={note.pk} className="list-group-item d-flex justify-content-between align-items-center">
@@ -46,8 +52,8 @@ class App extends Component {
           {note.title}
         </span>
         <span>
-          <button className="btn btn-success mr-2" onClick={() => this.viewNote(note.title, note.noteText)}>View</button>{' '}
-          <button className="btn btn-danger">Delete</button>
+          <button className="btn btn-success mr-2" onClick={() => this.viewNote(note.pk, note.title, note.noteText)}>View</button>{' '}
+          <button className="btn btn-danger" onClick={() => this.deleteNote(note.pk)}>Delete</button>
         </span>
       </li>
     ));
@@ -67,7 +73,8 @@ class App extends Component {
               <ul className="list-group list-group-flush border-top-0">
                 {this.renderNotes()}
                 {<DisplayNote showNote={this.state.displayNote} noteTitle={this.state.currentNoteTitle} 
-                noteText={this.state.currentNoteText} onClose={this.close}/>}
+                noteText={this.state.currentNoteText} noteId={this.state.currentNoteId} 
+                onClose={this.close}/>}
               </ul>
             </div>
           </div>

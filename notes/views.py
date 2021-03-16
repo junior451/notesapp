@@ -66,22 +66,22 @@ def viewNote(request, note_id):
   serializer = NoteSerializer(note, context={'request': request}, many=False)
   return Response(serializer.data)
 
+
+@api_view(('PUT',))
 def updateNote(request, note_id):
   note = get_object_or_404(Note, pk=note_id)
 
-  if(request.method == 'POST'):
-    form = NoteForm(request.POST)
-    if(form.is_valid()):
-      note.title = form.cleaned_data['title']
-      note.noteText = form.cleaned_data['noteText']
-      note.save()
-    return redirect('home')
+  if(request.method == 'PUT'):
+    note.title = request.data["title"]
+    note.noteText = request.data["noteText"]
+    note.save()
 
-  else:
-    form = NoteForm(instance=note)
-    return render(request, 'notes/updateNoteForm.html', {'form':form})
+  return Response(status=status.HTTP_204_NO_CONTENT)
 
+@api_view(('DELETE',))
 def deleteNote(request, note_id):
-  note = get_object_or_404(Note, pk=note_id)
-  note.delete()
-  return redirect('home')
+  if(request.method == 'DELETE'):
+    note = get_object_or_404(Note, pk=note_id)
+    note.delete()
+
+  return Response(status=status.HTTP_204_NO_CONTENT)
